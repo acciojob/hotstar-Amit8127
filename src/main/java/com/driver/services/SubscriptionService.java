@@ -55,15 +55,40 @@ public class SubscriptionService {
         //In all other cases just try to upgrade the subscription and tell the difference of price that user has to pay
         //update the subscription in the repository
 
-        return null;
+        User user = userRepository.findById(userId).get();
+        if(user.getSubscription().getSubscriptionType().toString().equals("ELITE")){
+            throw new Exception("Already the best Subscription");
+        }
+
+        Subscription subscription = user.getSubscription();
+        Integer currentPrice = 0;
+        if(subscription.getSubscriptionType().toString().equals("BASIC")){
+            // upgrade Basic to Pro
+            subscription.setSubscriptionType(SubscriptionType.PRO);
+            currentPrice = subscription.getTotalAmountPaid() + 300 + (50 * subscription.getNoOfScreensSubscribed());
+        }else {
+            // upgrade pro to Eilite
+            subscription.setSubscriptionType(SubscriptionType.ELITE);
+            currentPrice = subscription.getTotalAmountPaid() + 200 + (100 * subscription.getNoOfScreensSubscribed());
+        }
+
+        subscription.setTotalAmountPaid(currentPrice);
+        user.setSubscription(subscription);
+        subscriptionRepository.save(subscription);
+
+        return currentPrice - subscription.getTotalAmountPaid();
     }
 
     public Integer calculateTotalRevenueOfHotstar(){
 
         //We need to find out total Revenue of hotstar : from all the subscriptions combined
         //Hint is to use findAll function from the SubscriptionDb
-
-        return null;
+        List<Subscription> subscriptionList = subscriptionRepository.findAll();
+        int totalRevenue = 0;
+        for(Subscription subscription : subscriptionList) {
+            totalRevenue += subscription.getTotalAmountPaid();
+        }
+        return totalRevenue;
     }
 
 }
