@@ -38,6 +38,14 @@ public class WebSeriesService {
                 webSeriesEntryDto.getSubscriptionType());
         currWebSeries.setProductionHouse(productionHouse);
         webSeriesList.add(currWebSeries);
+
+        double count = 0;
+        for(WebSeries webSeries1 : webSeriesList) {
+            count += webSeries1.getRating();
+        }
+        double ratings = count / (double)webSeriesList.size();
+
+        productionHouse.setRatings(ratings);
         productionHouse.setWebSeriesList(webSeriesList);
         currWebSeries = webSeriesRepository.save(currWebSeries);
         productionHouseRepository.save(productionHouse);
