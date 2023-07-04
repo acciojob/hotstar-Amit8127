@@ -41,7 +41,7 @@ public class SubscriptionService {
         User user = userRepository.findById(subscriptionEntryDto.getUserId()).get();
         subscription.setUser(user);
         subscription.setTotalAmountPaid(price);
-
+        subscription.setNoOfScreensSubscribed(screens);
         user.setSubscription(subscription);
 
         userRepository.save(user);
