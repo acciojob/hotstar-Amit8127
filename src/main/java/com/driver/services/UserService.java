@@ -40,14 +40,20 @@ public class UserService {
         int countOfWebSeries = 0;
         for(WebSeries webSeries : webSeriesList) {
             if(user.getAge() >= webSeries.getAgeLimit()) {
-                if(user.getSubscription().equals(SubscriptionType.BASIC) && webSeries.getSubscriptionType().equals(SubscriptionType.BASIC)) {
-                    countOfWebSeries++;
-                } else if(user.getSubscription().equals(SubscriptionType.PRO) && (webSeries.getSubscriptionType().equals(SubscriptionType.BASIC) || webSeries.getSubscriptionType().equals(SubscriptionType.PRO))) {
-                    countOfWebSeries++;
-                } else if(user.getSubscription().equals(SubscriptionType.ELITE) && (webSeries.getSubscriptionType().equals(SubscriptionType.ELITE)
-                        || webSeries.getSubscriptionType().equals(SubscriptionType.PRO)
-                        || webSeries.getSubscriptionType().equals(SubscriptionType.BASIC))) {
-                    countOfWebSeries++;
+                if(user.getSubscription().equals(SubscriptionType.BASIC)) {
+                    if(webSeries.getSubscriptionType().equals(SubscriptionType.BASIC)) {
+                        countOfWebSeries++;
+                    }
+                } else if(user.getSubscription().equals(SubscriptionType.PRO)) {
+                    if(webSeries.getSubscriptionType().equals(SubscriptionType.PRO) || webSeries.getSubscriptionType().equals(SubscriptionType.BASIC)) {
+                        countOfWebSeries++;
+                    }
+                } else if(user.getSubscription().equals(SubscriptionType.ELITE)) {
+                    if((webSeries.getSubscriptionType().equals(SubscriptionType.ELITE)
+                            || webSeries.getSubscriptionType().equals(SubscriptionType.PRO)
+                            || webSeries.getSubscriptionType().equals(SubscriptionType.BASIC))) {
+                        countOfWebSeries++;
+                    }
                 }
             }
         }
