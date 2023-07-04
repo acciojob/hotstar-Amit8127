@@ -61,22 +61,23 @@ public class SubscriptionService {
         }
 
         Subscription subscription = user.getSubscription();
+        Integer price =subscription.getTotalAmountPaid();
         Integer currentPrice = 0;
         if(subscription.getSubscriptionType().equals(SubscriptionType.BASIC)){
             // upgrade Basic to Pro
             subscription.setSubscriptionType(SubscriptionType.PRO);
-            currentPrice = subscription.getTotalAmountPaid() + 300 + (50 * subscription.getNoOfScreensSubscribed());
+            currentPrice = (price + 300) + (50 * subscription.getNoOfScreensSubscribed());
         }else {
             // upgrade pro to Elite
             subscription.setSubscriptionType(SubscriptionType.ELITE);
-            currentPrice = subscription.getTotalAmountPaid() + 200 + (100 * subscription.getNoOfScreensSubscribed());
+            currentPrice = (price + 200) + (100 * subscription.getNoOfScreensSubscribed());
         }
 
         subscription.setTotalAmountPaid(currentPrice);
         user.setSubscription(subscription);
         subscriptionRepository.save(subscription);
 
-        return currentPrice - subscription.getTotalAmountPaid();
+        return currentPrice - price;
     }
 
     public Integer calculateTotalRevenueOfHotstar(){
