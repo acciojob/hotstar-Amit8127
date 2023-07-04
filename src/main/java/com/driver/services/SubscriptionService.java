@@ -56,18 +56,18 @@ public class SubscriptionService {
         //update the subscription in the repository
 
         User user = userRepository.findById(userId).get();
-        if(user.getSubscription().getSubscriptionType().toString().equals("ELITE")){
+        if(user.getSubscription().getSubscriptionType().equals(SubscriptionType.ELITE)){
             throw new Exception("Already the best Subscription");
         }
 
         Subscription subscription = user.getSubscription();
         Integer currentPrice = 0;
-        if(subscription.getSubscriptionType().toString().equals("BASIC")){
+        if(subscription.getSubscriptionType().equals(SubscriptionType.BASIC)){
             // upgrade Basic to Pro
             subscription.setSubscriptionType(SubscriptionType.PRO);
             currentPrice = subscription.getTotalAmountPaid() + 300 + (50 * subscription.getNoOfScreensSubscribed());
         }else {
-            // upgrade pro to Eilite
+            // upgrade pro to Elite
             subscription.setSubscriptionType(SubscriptionType.ELITE);
             currentPrice = subscription.getTotalAmountPaid() + 200 + (100 * subscription.getNoOfScreensSubscribed());
         }
